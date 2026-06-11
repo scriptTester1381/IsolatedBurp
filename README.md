@@ -4,7 +4,7 @@ IsoBurp is a highly portable, hardware-agnostic Dockerized sandbox built to comp
 
 Unlike default containerized graphical configurations, IsoBurp implements a strict **"Gold Copy" Baseline Restoration** model. Every single execution purges the operational workspace entirely and restores it from a trusted snapshot. When the application terminates, the environment is cleanly dismantled, safely storing core configurations while permanently throwing away session contamination.
 
-This is completely open source, download and make your own changes as you see fit! If you find any bugs or needed changes, please let me know!
+This is completely open source, download and make your own changes as you see fit! If you find any bugs or needed changes, please let me know! I tested this project on two machines: a Parrot Security laptop and an Ubuntu VM. That being said, there will likely be issues that I have not been able to discover with other Debian based machines.
 
 ---
 
