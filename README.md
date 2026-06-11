@@ -59,12 +59,25 @@ IsoBurp is designed to run out-of-the-box on any Debian-based distribution (e.g.
 ```bash
    sudo apt install git
 ```
-4. **EXTRA: Always Run With "sudo" (YES, EVEN IF YOUR USER IS A DOCKER GROUP MEMBER):** When I was making the main script, I ran into quite a few permissions issues, like, a lot. One of the solutions I put into place, was to put a check in the script that makes sure it gets ran with sudo user permissions. Although there were several reasons for this particular feature, the main reason had to do with conflicts between root and the logged in user. This script requires that the Docker container have host-level display permissions, and this temporary change can only be made by root, however, you can't just run the script within a root user shell, because that will result in there being cached files put into the root directory (this creates a huge cascade of problems, both with security, and with state saving).
 
-   So, to summarize, when you run the script, you must run:
+---
+
+## When Running
+
+Below are a couple of things you should know before you start using the script:
+
+1. **On First Run:** Make sure before you do the following before you run the script for the first time:
+```bash
+   sudo chmod +x [PATH TO SCRIPT LOCATION]/isolatedBurp.sh
+```
+2. **Always Run With "sudo" (YES, EVEN IF YOUR USER IS A DOCKER GROUP MEMBER):** When I was making the main script, I ran into quite a few permissions issues, like, a lot. One of the solutions I put into place, was to put a check in the script that makes sure it gets ran with sudo user permissions. Although there were several reasons for this particular feature, the main reason had to do with conflicts between root and the logged in user. This script requires that the Docker container have host-level display permissions, and this temporary change can only be made by root, however, you can't just run the script within a root user shell, because that will result in there being cached files put into the root directory (this creates a huge cascade of problems, both with security, and with state saving).
+
+   So, to summarize, whenever you run the script, you must run:
 ```bash
    sudo ./isolatedBurp.sh
 ```
+
+---
 
 ## Credits & Attribution
 
