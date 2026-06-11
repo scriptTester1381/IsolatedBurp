@@ -28,32 +28,42 @@ IsoBurp is designed to run out-of-the-box on any Debian-based distribution (e.g.
 ```
 2. **Make Sure Podman is Completely Removed and/or Deactivated (if applicable):** With the way that the Dockerfile is built and the scripts are made, by default, nothing will work unless you completely convert your environment over to Docker first. Podman will not cooperate with this build at all unless you manage to go in and make the changes yourself.
 
-To completely deactivate Podman, execute the following:
+   To completely deactivate Podman, execute the following:
 ```bash
-# Stop and disable any active Podman system and user services/sockets
-sudo systemctl stop podman.socket podman.service 2>/dev/null
-sudo systemctl disable podman.socket podman.service 2>/dev/null
-systemctl --user stop podman.socket podman.service 2>/dev/null
-systemctl --user disable podman.socket podman.service 2>/dev/null
+   # Stop and disable any active Podman system and user services/sockets
+   sudo systemctl stop podman.socket podman.service 2>/dev/null
+   sudo systemctl disable podman.socket podman.service 2>/dev/null
+   systemctl --user stop podman.socket podman.service 2>/dev/null
+   systemctl --user disable podman.socket podman.service 2>/dev/null
+   
+   # Completely uninstall the Podman packages and their configuration wrappers
+   sudo apt purge -y podman podman-docker containernetworking-plugins
+   sudo apt autoremove -y
+   
+   # Clean up lingering system configuration files and network bridges
+   sudo rm -rf /etc/containers /var/lib/containers ~/.local/share/containers
+   sudo rm -rf /etc/cni/net.d
+   
+   # Remove any hardcoded Podman aliases or environment redirections from your shell profile
+   # (This unsets variables like DOCKER_HOST if they were pointed to the Podman socket)
+   sed -i '/alias docker=/d' ~/.bashrc ~/.zshrc 2>/dev/null
+   sed -i '/DOCKER_HOST.*podman/d' ~/.bashrc ~/.zshrc 2>/dev/null
+   
+   # Reset your active shell environment variables
+   unset DOCKER_HOST
+   
+   # Verify that the 'docker' command now points directly to the real Docker engine
+   docker info
+```
+3. **Make Sure git is Installed:** Do the following:
+```bash
+   sudo apt install git
+```
+4. **EXTRA: Always Run With "sudo" (YES, EVEN IF YOUR USER IS A DOCKER GROUP MEMBER):** When I was making the main script, I ran into quite a few permissions issues, like, a lot. One of the solutions I put into place, was to put a check in the script that makes sure it gets ran with sudo user permissions. Although there were several reasons for this particular feature, the main reason had to do with conflicts between root and the logged in user. This script requires that the Docker container have host-level display permissions, and this temporary change can only be made by root, however, you can't just run the script within a root user shell, because that will result in there being cached files put into the root directory (this creates a huge cascade of problems, both with security, and with state saving).
 
-# Completely uninstall the Podman packages and their configuration wrappers
-sudo apt purge -y podman podman-docker containernetworking-plugins
-sudo apt autoremove -y
-
-# Clean up lingering system configuration files and network bridges
-sudo rm -rf /etc/containers /var/lib/containers ~/.local/share/containers
-sudo rm -rf /etc/cni/net.d
-
-# Remove any hardcoded Podman aliases or environment redirections from your shell profile
-# (This unsets variables like DOCKER_HOST if they were pointed to the Podman socket)
-sed -i '/alias docker=/d' ~/.bashrc ~/.zshrc 2>/dev/null
-sed -i '/DOCKER_HOST.*podman/d' ~/.bashrc ~/.zshrc 2>/dev/null
-
-# Reset your active shell environment variables
-unset DOCKER_HOST
-
-# Verify that the 'docker' command now points directly to the real Docker engine
-docker info
+   So, to summarize, when you run the script, you must run:
+```bash
+   sudo ./isolatedBurp.sh
 ```
 
 ## Credits & Attribution
