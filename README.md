@@ -76,6 +76,7 @@ Below are a couple of things you should know before you start using the script:
 ```bash
    sudo ./isolatedBurp.sh
 ```
+**Note:** You do not have to worry about building a new Docker image beforehand, that is all built into the script; it will build a new ubuntu image from the Docker file that comes with the package.
 
 ---
 
