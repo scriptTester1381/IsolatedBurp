@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Had to add these vars because if I didn't, then creating a sym link to the launcher script would result in nothing working.
+TARGET_FILE="$(readlink -f "${BASH_SOURCE[0]}")"
+SCRIPT_DIR="$(dirname "$TARGET_FILE")"
+
 # Build latest version of Docker Image from Dockerfile
 echo "Building Docker Image from Docker File..."
 sleep 1
@@ -17,7 +21,7 @@ if [ $ans == "y" ]; then
 	sleep 1
 	echo
 	# Run the purge script as the current logged in user instead of root.
-	bash -c "sudo -u $SUDO_USER sh IsolatedBurpSuiteSession/cachePurge.sh"
+	bash -c "sudo -u $SUDO_USER sh $SCRIPT_DIR/IsolatedBurpSuiteSession/cachePurge.sh"
 	echo "Cache Purged!"
 	echo "IMPORTANT: Use /home/ubuntu/.BurpSuite/persistent_browser within the BurpSuite \"Burp's Browser\" settings. This will ensure configuration persistence."
 	echo -n "Press enter to continue..."
@@ -28,4 +32,4 @@ fi
 echo
 echo "Launching container..."
 sleep 1
-bash -c "sh IsolatedBurpSuiteSession/main.sh"
+bash -c "sh $SCRIPT_DIR/IsolatedBurpSuiteSession/main.sh"
