@@ -7,7 +7,7 @@ SCRIPT_DIR="$(dirname "$TARGET_FILE")"
 # Build latest version of Docker Image from Dockerfile
 echo "Building Docker Image from Docker File..."
 sleep 1
-bash -c "docker build -t ubuntu-burp:latest ."
+bash -c "docker build -t ubuntu-burp:latest $SCRIPT_DIR/IsolatedBurpSuiteSession/."
 clear
 
 # Ask user if they want to begin a fresh config file. Doing this will begin a new gold state and the user can re-enter their preferred settings.

@@ -43,7 +43,7 @@ if [ -n "$BURP_CHROME_PATH" ]; then
     echo 'export DCONF_USER_CONFIG_DIR=/home/ubuntu/.config/dconf' >> "$WRAPPER_PATH"
     echo 'export XDG_RUNTIME_DIR=/home/ubuntu/.runtime' >> "$WRAPPER_PATH"
     echo 'export NO_AT_BRIDGE=1' >> "$WRAPPER_PATH"
-    echo 'exec /usr/bin/chromium --no-sandbox --test-type --disable-dev-shm-usage --disable-gpu --load-extension=/home/ubuntu/RSC_Detector "$@" >> /home/ubuntu/chrome_debug.log 2>&1' >> "$WRAPPER_PATH"
+	echo 'exec /usr/bin/chromium --no-sandbox --test-type --disable-dev-shm-usage --disable-gpu --load-extension=/home/ubuntu/RSC_Detector "$@" >> /home/ubuntu/chrome_debug.log 2>&1' >> "$WRAPPER_PATH"
     chmod +x "$WRAPPER_PATH"
 
     # mount the wrapper directly over the official binary
@@ -53,6 +53,30 @@ else
 fi
 
 chown -R "$REAL_UID:$REAL_GID" "$PROFILE_DIR"
+
+# --- PROXY CONFIGURATION INJECTION ---
+# This block is mostly to ensure the listening port doesn't default to 8080, since that port is the default for a lot of programs.
+BURP_CONFIG_FILE="$PROFILE_DIR/custom_proxy.json"
+if [ ! -f "$BURP_CONFIG_FILE" ]; then
+    echo "[Config] Generating custom Burp config to shift proxy port to 8085..."
+    cat << 'EOF' > "$BURP_CONFIG_FILE"
+{
+    "proxy": {
+        "request_listeners": [
+            {
+                "certificate_mode": "per_host",
+                "listen_mode": "loopback_only",
+                "listener_port": 8085,
+                "running": true
+            }
+        ]
+    }
+}
+EOF
+    # Ensure the user retains ownership of the file
+    chown "$REAL_UID:$REAL_GID" "$BURP_CONFIG_FILE"
+fi
+# -------------------------------------
 
 echo "Launching Burp Suite..."
 sudo -u "$REAL_USER" xhost +local:
@@ -84,7 +108,7 @@ docker run --rm -it \
   ubuntu-burp:latest \
   bash -c "
     mkdir -p /home/ubuntu/.runtime
-    java -jar /opt/BurpSuite/burpsuite.jar
+    java -jar /opt/BurpSuite/burpsuite.jar --config-file=/home/ubuntu/custom_proxy.json
   "
 
 ###	This script took a suprisingly large amount of time to make, and I had to do an absurd amount of debugging and troubleshooting.
