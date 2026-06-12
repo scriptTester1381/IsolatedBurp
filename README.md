@@ -6,6 +6,8 @@ Unlike default containerized graphical configurations, IsoBurp implements a stri
 
 This is completely open source, download and make your own changes as you see fit! If you find any bugs or needed changes, please let me know! I tested this project on two machines: a Parrot Security laptop and an Ubuntu VM. That being said, there will likely be issues that I have not been able to discover with other Debian based machines.
 
+**IMPORTANT NOTE:** This script library is only made to function for those who have installed BurpSuite using the installer obtained from the official Port Swigger website linked [HERE](https://portswigger.net/burp/documentation/desktop/getting-started/download-and-install).
+
 ---
 
 ## Key Features
