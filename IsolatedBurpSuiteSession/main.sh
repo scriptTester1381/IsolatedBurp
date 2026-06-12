@@ -43,7 +43,7 @@ if [ -n "$BURP_CHROME_PATH" ]; then
     echo 'export DCONF_USER_CONFIG_DIR=/home/ubuntu/.config/dconf' >> "$WRAPPER_PATH"
     echo 'export XDG_RUNTIME_DIR=/home/ubuntu/.runtime' >> "$WRAPPER_PATH"
     echo 'export NO_AT_BRIDGE=1' >> "$WRAPPER_PATH"
-	echo 'exec /usr/bin/chromium --no-sandbox --test-type --disable-dev-shm-usage --disable-gpu --load-extension=/home/ubuntu/RSC_Detector "$@" >> /home/ubuntu/chrome_debug.log 2>&1' >> "$WRAPPER_PATH"
+	echo 'exec /usr/bin/chromium --no-sandbox --test-type --disable-dev-shm-usage --disable-background-networking --disable-gpu --load-extension=/home/ubuntu/RSC_Detector "$@" >> /home/ubuntu/chrome_debug.log 2>&1' >> "$WRAPPER_PATH"
     chmod +x "$WRAPPER_PATH"
 
     # mount the wrapper directly over the official binary
@@ -100,6 +100,15 @@ docker run --rm -it \
   -e DISPLAY="$DISPLAY" \
   -e XDG_RUNTIME_DIR=/home/ubuntu/.runtime \
   -e HOME=/home/ubuntu \
+  # Added some DNS sinkhole rules for added telemetry filtering.
+  --add-host clients2.google.com:0.0.0.0 \
+  --add-host accounts.google.com:0.0.0.0 \
+  --add-host android.clients.google.com:0.0.0.0 \
+  --add-host optimizationguide-pa.googleapis.com:0.0.0.0 \
+  --add-host redirector.gvt1.com:0.0.0.0 \
+  --add-host beacons.gvt2.com:0.0.0.0 \
+  --add-host content-autofill.googleapis.com:0.0.0.0 \
+  --add-host update.googleapis.com:0.0.0.0 \
   -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
   -v "$BURP_DIR:/opt/BurpSuite:ro" \
   -v "$PROFILE_DIR:/home/ubuntu" \
