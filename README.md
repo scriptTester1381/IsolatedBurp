@@ -8,6 +8,11 @@ This is completely open source, download and make your own changes as you see fi
 
 **IMPORTANT NOTE:** This script library is only made to function for those who have installed BurpSuite using the installer obtained from the official PortSwigger website linked [HERE](https://portswigger.net/burp/documentation/desktop/getting-started/download-and-install).
 
+**Download Using git:**
+```bash
+git clone https://github.com/scriptTester1381/IsolatedBurp.git
+```
+
 ---
 
 ## Key Features
