@@ -86,3 +86,6 @@ docker run --rm -it \
     mkdir -p /home/ubuntu/.runtime
     java -jar /opt/BurpSuite/burpsuite.jar
   "
+
+###	This script took a suprisingly large amount of time to make, and I had to do an absurd amount of debugging and troubleshooting.
+### If you see things that seem poorly made or pointless, it's probably because I was up at 4 AM working on this and was losing my mind.
