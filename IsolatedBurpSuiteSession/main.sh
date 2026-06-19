@@ -94,13 +94,13 @@ trap "
     echo 'X11 privileges revoked.'
 " EXIT
 
+# Added some DNS sinkhole rules for added telemetry filtering.
 docker run --rm -it \
   --shm-size="2g" \
   --ipc=host \
   -e DISPLAY="$DISPLAY" \
   -e XDG_RUNTIME_DIR=/home/ubuntu/.runtime \
   -e HOME=/home/ubuntu \
-  # Added some DNS sinkhole rules for added telemetry filtering.
   --add-host clients2.google.com:0.0.0.0 \
   --add-host accounts.google.com:0.0.0.0 \
   --add-host android.clients.google.com:0.0.0.0 \

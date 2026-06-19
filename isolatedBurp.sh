@@ -16,12 +16,12 @@ sleep 1
 read -r ans
 
 # Purge script only executes if the user wants to start a fresh config file.
-if [ $ans == "y" ]; then
+if [ "$ans" == "y" ]; then
 	echo "Purging container cache..."
 	sleep 1
 	echo
 	# Run the purge script as the current logged in user instead of root.
-	bash -c "sudo -u $SUDO_USER sh $SCRIPT_DIR/IsolatedBurpSuiteSession/cachePurge.sh"
+	bash -c "sudo -u $SUDO_USER bash $SCRIPT_DIR/IsolatedBurpSuiteSession/cachePurge.sh"
 	echo "Cache Purged!"
 	echo "IMPORTANT: Use /home/ubuntu/.BurpSuite/persistent_browser within the BurpSuite \"Burp's Browser\" settings. This will ensure configuration persistence."
 	echo -n "Press enter to continue..."
@@ -32,4 +32,4 @@ fi
 echo
 echo "Launching container..."
 sleep 1
-bash -c "sh $SCRIPT_DIR/IsolatedBurpSuiteSession/main.sh"
+sudo bash "$SCRIPT_DIR/IsolatedBurpSuiteSession/main.sh"
