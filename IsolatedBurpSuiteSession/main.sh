@@ -95,6 +95,7 @@ trap "
 " EXIT
 
 # Added some DNS sinkhole rules for added telemetry filtering.
+# Added some DNS sinkhole rules for added telemetry filtering below starting at the "--add-host" line.
 docker run --rm -it \
   --shm-size="2g" \
   --ipc=host \
